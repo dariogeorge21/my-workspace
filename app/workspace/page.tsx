@@ -4,15 +4,16 @@ import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { FileText, Bookmark, Lock, FolderOpen, Terminal, Settings } from "lucide-react"
 import Link from "next/link"
-import { getSettings, getDashboardApps } from "@/lib/actions/settings"
+import { getSettings, getDashboardApps, getDashboardStats } from "@/lib/actions/settings"
 
 export default function DashboardPage() {
   const [settings, setSettings] = useState<any>(null)
   const [apps, setApps] = useState<any[]>([])
+  const [statsData, setStatsData] = useState({ appPrompts: 0, personalPrompts: 0, passwords: 0, commands: 0 })
   
   useEffect(() => {
     const fetchData = async () => {
-      const [settingsRes, appsRes] = await Promise.all([getSettings(), getDashboardApps()])
+      const [settingsRes, appsRes, statsRes] = await Promise.all([getSettings(), getDashboardApps(), getDashboardStats()])
       if (settingsRes.success && settingsRes.data) {
         setSettings(settingsRes.data)
       } else {
@@ -23,6 +24,9 @@ export default function DashboardPage() {
       }
       if (appsRes.success && appsRes.data) {
         setApps(appsRes.data)
+      }
+      if (statsRes.success && statsRes.data) {
+        setStatsData(statsRes.data)
       }
     }
     fetchData()
@@ -47,7 +51,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1 tracking-wide uppercase text-[10px]">App Prompts</p>
-                <p className="text-3xl font-bold tracking-tight">12</p>
+                <p className="text-3xl font-bold tracking-tight">{statsData.appPrompts}</p>
               </div>
               <div className="p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-xl"><FileText className="w-6 h-6 text-zinc-700 dark:text-zinc-300" /></div>
             </div>
@@ -59,7 +63,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1 tracking-wide uppercase text-[10px]">My Prompts</p>
-                <p className="text-3xl font-bold tracking-tight">5</p>
+                <p className="text-3xl font-bold tracking-tight">{statsData.personalPrompts}</p>
               </div>
               <div className="p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-xl"><Bookmark className="w-6 h-6 text-zinc-700 dark:text-zinc-300" /></div>
             </div>
@@ -71,7 +75,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1 tracking-wide uppercase text-[10px]">Passwords</p>
-                <p className="text-3xl font-bold tracking-tight">18</p>
+                <p className="text-3xl font-bold tracking-tight">{statsData.passwords}</p>
               </div>
               <div className="p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-xl"><Lock className="w-6 h-6 text-zinc-700 dark:text-zinc-300" /></div>
             </div>
@@ -83,7 +87,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1 tracking-wide uppercase text-[10px]">Commands</p>
-                <p className="text-3xl font-bold tracking-tight">34</p>
+                <p className="text-3xl font-bold tracking-tight">{statsData.commands}</p>
               </div>
               <div className="p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-xl"><Terminal className="w-6 h-6 text-zinc-700 dark:text-zinc-300" /></div>
             </div>

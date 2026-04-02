@@ -1,14 +1,37 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { userSettings, dashboardApps } from "@/lib/db/schema"
-import { eq, desc } from "drizzle-orm"
+import { userSettings, dashboardApps, appPrompts, personalPrompts, passwordEntries, quickCommands } from "@/lib/db/schema"
+import { eq, desc, count } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { verifySession } from "@/lib/session"
 
 // ----------------------------------------------------------------------------
 // Settings
 // ----------------------------------------------------------------------------
+
+export async function getDashboardStats() {
+  await verifySession()
+  try {
+    const [appPromptsCount] = await db.select({ value: count() }).from(appPrompts)
+    const [personalPromptsCount] = await db.select({ value: count() }).from(personalPrompts)
+    const [passwordsCount] = await db.select({ value: count() }).from(passwordEntries)
+    const [commandsCount] = await db.select({ value: count() }).from(quickCommands)
+
+    return {
+      success: true,
+      data: {
+        appPrompts: appPromptsCount.value,
+        personalPrompts: personalPromptsCount.value,
+        passwords: passwordsCount.value,
+        commands: commandsCount.value
+      }
+    }
+  } catch (error) {
+    console.error("Failed to fetch dashboard stats:", error)
+    return { success: false, data: { appPrompts: 0, personalPrompts: 0, passwords: 0, commands: 0 } }
+  }
+}
 
 export async function getSettings() {
   await verifySession()
