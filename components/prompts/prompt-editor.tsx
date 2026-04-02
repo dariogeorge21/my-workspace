@@ -81,7 +81,11 @@ export function PromptEditor({ type, id }: PromptEditorProps) {
     if (res.success) {
       toast.success("Prompt saved perfectly");
       if (isNew) {
-        router.push(`/workspace/${type === 'app' ? 'app-prompts' : 'my-prompts'}/${res.data.id}`);
+        if (res.data?.id) {
+          router.push(`/workspace/${type === 'app' ? 'app-prompts' : 'my-prompts'}/${res.data.id}`);
+        } else {
+          toast.error("Prompt created, but redirect data is missing");
+        }
       }
     } else {
       toast.error(res.error || "Failed to save");

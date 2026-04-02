@@ -14,18 +14,18 @@ function getTable(type: PromptType) {
 export async function getPrompts(type: PromptType, search?: string) {
   const table = getTable(type);
   try {
-    let query = db.select().from(table);
-    
-    if (search) {
-      query = query.where(
-        or(
-          ilike(table.heading, `%${search}%`),
-          ilike(table.content, `%${search}%`)
-        )
-      );
-    }
-    
-    return await query.orderBy(desc(table.updated_at));
+    return await db
+      .select()
+      .from(table)
+      .where(
+        search
+          ? or(
+              ilike(table.heading, `%${search}%`),
+              ilike(table.content, `%${search}%`)
+            )
+          : undefined
+      )
+      .orderBy(desc(table.updated_at));
   } catch (err) {
     console.error(err);
     return [];
