@@ -10,6 +10,42 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { Monitor, Moon, Sun, LayoutDashboard, Link as LinkIcon, Trash2, Plus, GripVertical } from "lucide-react"
 
+type QuickNavSettings = {
+  show_apps: boolean
+  show_personal: boolean
+  show_passwords: boolean
+  show_files: boolean
+  show_commands: boolean
+}
+
+type DashboardStatsSettings = {
+  show_projects: boolean
+  show_words: boolean
+  show_time: boolean
+}
+
+function isQuickNavSettings(value: unknown): value is QuickNavSettings {
+  if (!value || typeof value !== "object") return false
+  const v = value as Record<string, unknown>
+  return (
+    typeof v.show_apps === "boolean" &&
+    typeof v.show_personal === "boolean" &&
+    typeof v.show_passwords === "boolean" &&
+    typeof v.show_files === "boolean" &&
+    typeof v.show_commands === "boolean"
+  )
+}
+
+function isDashboardStatsSettings(value: unknown): value is DashboardStatsSettings {
+  if (!value || typeof value !== "object") return false
+  const v = value as Record<string, unknown>
+  return (
+    typeof v.show_projects === "boolean" &&
+    typeof v.show_words === "boolean" &&
+    typeof v.show_time === "boolean"
+  )
+}
+
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -17,8 +53,8 @@ export default function SettingsPage() {
 
   // DB Settings
   const [settingsId, setSettingsId] = useState<string | null>(null)
-  const [quickNav, setQuickNav] = useState({ show_apps: true, show_personal: true, show_passwords: true, show_files: true, show_commands: true })
-  const [stats, setStats] = useState({ show_projects: true, show_words: true, show_time: true })
+  const [quickNav, setQuickNav] = useState<QuickNavSettings>({ show_apps: true, show_personal: true, show_passwords: true, show_files: true, show_commands: true })
+  const [stats, setStats] = useState<DashboardStatsSettings>({ show_projects: true, show_words: true, show_time: true })
   
   // Apps
   const [apps, setApps] = useState<any[]>([])
@@ -37,8 +73,12 @@ export default function SettingsPage() {
       
       if (settingsRes.success && settingsRes.data) {
         setSettingsId(settingsRes.data.id)
-        if (settingsRes.data.quick_nav_settings) setQuickNav(settingsRes.data.quick_nav_settings)
-        if (settingsRes.data.dashboard_stats_settings) setStats(settingsRes.data.dashboard_stats_settings)
+        if (isQuickNavSettings(settingsRes.data.quick_nav_settings)) {
+          setQuickNav(settingsRes.data.quick_nav_settings)
+        }
+        if (isDashboardStatsSettings(settingsRes.data.dashboard_stats_settings)) {
+          setStats(settingsRes.data.dashboard_stats_settings)
+        }
       }
       
       if (appsRes.success && appsRes.data) setApps(appsRes.data)
