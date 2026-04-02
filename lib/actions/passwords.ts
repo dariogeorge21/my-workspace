@@ -9,18 +9,18 @@ import { revalidatePath } from "next/cache";
 
 export async function getPasswordEntries(search?: string) {
   try {
-    let query = db.select().from(passwordEntries);
-    
-    if (search) {
-      query = query.where(
-        or(
-          ilike(passwordEntries.application_name, `%${search}%`),
-          ilike(passwordEntries.username, `%${search}%`)
-        )
-      );
-    }
-    
-    const results = await query.orderBy(desc(passwordEntries.updated_at));
+    const results = await db
+      .select()
+      .from(passwordEntries)
+      .where(
+        search
+          ? or(
+              ilike(passwordEntries.application_name, `%${search}%`),
+              ilike(passwordEntries.username, `%${search}%`)
+            )
+          : undefined
+      )
+      .orderBy(desc(passwordEntries.updated_at));
     
     // Do NOT decrypt passwords here. Passwords should be "••••••••••••" by default.
     return results.map(entry => ({
