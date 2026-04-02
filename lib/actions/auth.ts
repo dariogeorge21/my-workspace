@@ -3,10 +3,11 @@
 import bcrypt from 'bcrypt';
 import { createSession, destroySession } from '@/lib/session';
 import { redirect } from 'next/navigation';
+import { getMasterPasswordHash } from '@/lib/master-password';
 
 export async function verifyPassword(password: string): Promise<{ success: boolean, error?: string }> {
   try {
-    const masterPasswordHash = process.env.MASTER_PASSWORD_HASH;
+    const masterPasswordHash = await getMasterPasswordHash();
 
     if (!masterPasswordHash) {
       console.error('MASTER_PASSWORD_HASH is not set in environment variables');
