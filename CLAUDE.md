@@ -17,7 +17,7 @@ A professional, aesthetic, and smooth productivity workspace for managing:
 This project MUST feel:
 - Minimal
 - Fast
-- Smooth
+- Smooth and athestic
 - Professional (Not flashy, but premium)
 - Distraction-free
 
@@ -33,8 +33,6 @@ Think:
 - Tailwind CSS
 - Shadcn UI
 - NeonDB (PostgreSQL)
-- Drizzle ORM (preferred)
-- next-themes
 - bcrypt + crypto (security)
 
 ---

@@ -101,7 +101,6 @@ Agents must NOT skip steps.
   - components/
   - lib/
   - db/
-  - actions/
 
 ---
 
