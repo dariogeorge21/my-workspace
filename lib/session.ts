@@ -50,6 +50,16 @@ export async function getSession(): Promise<SessionPayload | null> {
   }
 }
 
+export async function verifySession(): Promise<SessionPayload> {
+  const session = await getSession();
+
+  if (!session?.authenticated) {
+    throw new Error('Unauthorized');
+  }
+
+  return session;
+}
+
 export async function destroySession(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_NAME);
