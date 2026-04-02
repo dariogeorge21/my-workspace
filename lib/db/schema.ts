@@ -63,3 +63,11 @@ export const userSettings = pgTable('user_settings', {
   dashboard_stats_settings: jsonb('dashboard_stats_settings'),
   ...timestamps,
 });
+
+export const favouriteCommands = pgTable('favourite_commands', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  command_name: varchar('command_name', { length: 255 }).notNull(),
+  command: text('command').notNull(),
+  ...timestamps,
+});
+

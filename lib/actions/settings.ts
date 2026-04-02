@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { userSettings, dashboardApps, appPrompts, personalPrompts, passwordEntries, quickCommands } from "@/lib/db/schema"
+import { userSettings, dashboardApps, appPrompts, personalPrompts, passwordEntries, favouriteCommands } from "@/lib/db/schema"
 import { eq, desc, count } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { verifySession } from "@/lib/session"
@@ -16,7 +16,7 @@ export async function getDashboardStats() {
     const [appPromptsCount] = await db.select({ value: count() }).from(appPrompts)
     const [personalPromptsCount] = await db.select({ value: count() }).from(personalPrompts)
     const [passwordsCount] = await db.select({ value: count() }).from(passwordEntries)
-    const [commandsCount] = await db.select({ value: count() }).from(quickCommands)
+    const [commandsCount] = await db.select({ value: count() }).from(favouriteCommands)
 
     return {
       success: true,
