@@ -94,21 +94,35 @@ export default function SettingsPage() {
     }
   }
 
-  const handleQuickNavToggle = async (key: keyof typeof quickNav) => {
-    const updated = { ...quickNav, [key]: !quickNav[key] }
+  const handleQuickNavToggle = async (key: keyof typeof quickNav, checked: boolean) => {
+    const previous = quickNav
+    const updated = { ...quickNav, [key]: checked }
     setQuickNav(updated)
-    if (settingsId) {
-      await updateSettings(settingsId, { quick_nav_settings: updated })
+
+    if (!settingsId) return
+
+    const res = await updateSettings(settingsId, { quick_nav_settings: updated })
+    if (res.success) {
       toast.success("Preferences updated")
+    } else {
+      setQuickNav(previous)
+      toast.error(res.error || "Failed to update preferences")
     }
   }
 
-  const handleStatsToggle = async (key: keyof typeof stats) => {
-    const updated = { ...stats, [key]: !stats[key] }
+  const handleStatsToggle = async (key: keyof typeof stats, checked: boolean) => {
+    const previous = stats
+    const updated = { ...stats, [key]: checked }
     setStats(updated)
-    if (settingsId) {
-      await updateSettings(settingsId, { dashboard_stats_settings: updated })
+
+    if (!settingsId) return
+
+    const res = await updateSettings(settingsId, { dashboard_stats_settings: updated })
+    if (res.success) {
       toast.success("Preferences updated")
+    } else {
+      setStats(previous)
+      toast.error(res.error || "Failed to update preferences")
     }
   }
 
@@ -214,23 +228,23 @@ export default function SettingsPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-zinc-600 dark:text-zinc-400">Application Prompts</span>
-                  <Switch checked={quickNav.show_apps} onCheckedChange={() => handleQuickNavToggle("show_apps")} />
+                  <Switch checked={quickNav.show_apps} onCheckedChange={(checked) => handleQuickNavToggle("show_apps", checked)} />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-zinc-600 dark:text-zinc-400">Personal Prompts</span>
-                  <Switch checked={quickNav.show_personal} onCheckedChange={() => handleQuickNavToggle("show_personal")} />
+                  <Switch checked={quickNav.show_personal} onCheckedChange={(checked) => handleQuickNavToggle("show_personal", checked)} />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-zinc-600 dark:text-zinc-400">Passwords</span>
-                  <Switch checked={quickNav.show_passwords} onCheckedChange={() => handleQuickNavToggle("show_passwords")} />
+                  <Switch checked={quickNav.show_passwords} onCheckedChange={(checked) => handleQuickNavToggle("show_passwords", checked)} />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-zinc-600 dark:text-zinc-400">Files</span>
-                  <Switch checked={quickNav.show_files} onCheckedChange={() => handleQuickNavToggle("show_files")} />
+                  <Switch checked={quickNav.show_files} onCheckedChange={(checked) => handleQuickNavToggle("show_files", checked)} />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-zinc-600 dark:text-zinc-400">Commands</span>
-                  <Switch checked={quickNav.show_commands} onCheckedChange={() => handleQuickNavToggle("show_commands")} />
+                  <Switch checked={quickNav.show_commands} onCheckedChange={(checked) => handleQuickNavToggle("show_commands", checked)} />
                 </div>
               </div>
             </div>
@@ -240,15 +254,15 @@ export default function SettingsPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-zinc-600 dark:text-zinc-400">Total Projects / Total Prompts</span>
-                  <Switch checked={stats.show_projects} onCheckedChange={() => handleStatsToggle("show_projects")} />
+                  <Switch checked={stats.show_projects} onCheckedChange={(checked) => handleStatsToggle("show_projects", checked)} />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-zinc-600 dark:text-zinc-400">Word Counts</span>
-                  <Switch checked={stats.show_words} onCheckedChange={() => handleStatsToggle("show_words")} />
+                  <Switch checked={stats.show_words} onCheckedChange={(checked) => handleStatsToggle("show_words", checked)} />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-zinc-600 dark:text-zinc-400">Writing Time Tracker</span>
-                  <Switch checked={stats.show_time} onCheckedChange={() => handleStatsToggle("show_time")} />
+                  <Switch checked={stats.show_time} onCheckedChange={(checked) => handleStatsToggle("show_time", checked)} />
                 </div>
               </div>
             </div>

@@ -1,33 +1,49 @@
 "use client"
 
 import * as React from "react"
-import { Switch as SwitchPrimitive } from "radix-ui"
-
 import { cn } from "@/lib/utils"
 
-function Switch({
+interface SwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
+}
+
+export function Switch({
+  checked,
+  onCheckedChange,
   className,
-  size = "default",
+  disabled = false,
   ...props
-}: React.ComponentProps<typeof SwitchPrimitive.Root> & {
-  size?: "sm" | "default"
-}) {
+}: SwitchProps) {
   return (
-    <SwitchPrimitive.Root
-      data-slot="switch"
-      data-size={size}
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      disabled={disabled}
+      onClick={() => onCheckedChange(!checked)}
       className={cn(
-        "peer group/switch relative inline-flex shrink-0 items-center rounded-full border-2 transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-[size=default]:h-5 data-[size=default]:w-11 data-[size=sm]:h-4 data-[size=sm]:w-7 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-unchecked:border-transparent data-unchecked:bg-input/90 data-disabled:cursor-not-allowed data-disabled:opacity-50",
+        // Base container styles
+        "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
+        // Focus states for accessibility
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-400",
+        // Disabled state
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        // Dynamic background color based on state
+        checked ? "bg-slate-900 dark:bg-slate-50" : "bg-slate-200 dark:bg-slate-800",
         className
       )}
       {...props}
     >
-      <SwitchPrimitive.Thumb
-        data-slot="switch-thumb"
-        className="pointer-events-none block rounded-full bg-background shadow-sm ring-0 transition-transform not-dark:bg-clip-padding group-data-[size=default]/switch:h-4 group-data-[size=default]/switch:w-6 group-data-[size=sm]/switch:h-3 group-data-[size=sm]/switch:w-4 data-checked:translate-x-[calc(100%-8px)] dark:data-checked:bg-primary-foreground data-unchecked:translate-x-0 dark:data-unchecked:bg-foreground"
+      <span className="sr-only">Toggle switch</span>
+      <span
+        className={cn(
+          // The sliding circle (thumb) styles
+          "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform duration-200 ease-in-out",
+          // Dynamic translation based on state
+          checked ? "translate-x-5" : "translate-x-0"
+        )}
       />
-    </SwitchPrimitive.Root>
+    </button>
   )
 }
-
-export { Switch }
