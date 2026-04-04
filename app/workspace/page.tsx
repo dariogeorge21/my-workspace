@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 import { FileText, Bookmark, Lock, FolderOpen, Terminal, Settings } from "lucide-react"
 import Link from "next/link"
 import { getSettings, getDashboardApps, getDashboardStats } from "@/lib/actions/settings"
+import { toast } from "sonner"
 
 export default function DashboardPage() {
   const [settings, setSettings] = useState<any>(null)
@@ -13,7 +15,13 @@ export default function DashboardPage() {
   
   useEffect(() => {
     const fetchData = async () => {
+      toast.loading("✨ Hang on! Loading your workspace...", { 
+        id: "dashboard-load",
+      })
+
       const [settingsRes, appsRes, statsRes] = await Promise.all([getSettings(), getDashboardApps(), getDashboardStats()])
+      toast.dismiss("dashboard-load")
+      
       if (settingsRes.success && settingsRes.data) {
         setSettings(settingsRes.data)
       } else {
@@ -32,7 +40,62 @@ export default function DashboardPage() {
     fetchData()
   }, [])
 
-  if (!settings) return null // Or loading spinner
+  if (!settings) {
+    return (
+      <div className="max-w-6xl mx-auto p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
+        <header className="space-y-3">
+          <Skeleton className="h-9 w-48 rounded-lg bg-indigo-500/10 dark:bg-indigo-400/10 ring-1 ring-indigo-500/20 animate-pulse transition-all duration-700" />
+          <Skeleton className="h-5 w-96 rounded-md bg-zinc-200 dark:bg-zinc-800 animate-pulse transition-all duration-700 delay-100" />
+        </header>
+
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Card key={i} className="p-6 border-indigo-500/10 dark:border-indigo-400/10 rounded-2xl bg-indigo-50/30 dark:bg-slate-900/50 backdrop-blur-sm shadow-[0_0_15px_rgba(99,102,241,0.05)] dark:shadow-[0_0_15px_rgba(99,102,241,0.1)] flex items-center justify-between overflow-hidden relative border group hover:border-indigo-500/30 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 dark:via-white/5 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-[1500ms]" />
+              <div className="space-y-2 relative">
+                <Skeleton className="h-3 w-20 rounded-md bg-indigo-500/20 dark:bg-indigo-400/20 animate-pulse" />
+                <Skeleton className="h-8 w-12 rounded-lg bg-indigo-500/10 dark:bg-indigo-400/10 animate-pulse duration-1000" />
+              </div>
+              <Skeleton className="w-12 h-12 rounded-xl bg-indigo-500/20 dark:bg-indigo-400/20 animate-pulse duration-700 shadow-[0_0_10px_rgba(99,102,241,0.2)]" />
+            </Card>
+          ))}
+        </section>
+
+        <section>
+          <div className="mb-4">
+            <Skeleton className="h-7 w-40 rounded-lg bg-indigo-500/10 dark:bg-indigo-400/10 border border-indigo-500/20" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Card key={i} className="p-6 border-indigo-500/10 dark:border-indigo-400/10 rounded-2xl h-full flex flex-col group bg-indigo-50/30 dark:bg-slate-900/50 backdrop-blur-sm shadow-[0_0_15px_rgba(99,102,241,0.05)] overflow-hidden relative border transition-all duration-500 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 blur-[40px] rounded-full" />
+                <Skeleton className="w-9 h-9 rounded-xl mb-4 bg-indigo-500/20 dark:bg-indigo-400/20 animate-pulse" />
+                <Skeleton className="h-5 w-32 rounded-md mb-2 bg-indigo-500/15 dark:bg-indigo-400/15 animate-pulse duration-[1500ms]" />
+                <Skeleton className="h-4 w-48 rounded-md bg-indigo-500/10 dark:bg-indigo-400/10 animate-pulse duration-1000" />
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-4">
+            <Skeleton className="h-7 w-32 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50" />
+          </div>
+          <Card className="p-6 border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm shadow-sm relative overflow-hidden">
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,rgba(99,102,241,0.03),transparent)] -translate-x-[100%] animate-[pulse_3s_infinite]" />
+            <div className="flex flex-wrap gap-4 relative">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex flex-col items-center gap-2 p-3 min-w-[80px]">
+                  <Skeleton className="w-12 h-12 rounded-xl bg-zinc-200/50 dark:bg-zinc-800/50 animate-pulse delay-[150ms]" />
+                  <Skeleton className="h-3 w-16 rounded-md bg-zinc-200/30 dark:bg-zinc-800/30 animate-pulse delay-300" />
+                </div>
+              ))}
+            </div>
+          </Card>
+        </section>
+      </div>
+    )
+  }
 
   const quickNav = settings.quick_nav_settings
   const stats = settings.dashboard_stats_settings
