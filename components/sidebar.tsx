@@ -12,13 +12,13 @@ import {
   Terminal,
   Settings,
   LogOut,
-  Menu
+  Menu,
+  Command
 } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 import { logout } from "@/lib/actions/auth"
 import { Button } from "./ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
-import { useState } from "react"
 
 const navItems = [
   { name: "Dashboard", href: "/workspace", icon: LayoutDashboard },
@@ -27,7 +27,6 @@ const navItems = [
   { name: "My Passwords", href: "/workspace/passwords", icon: Lock },
   { name: "Personal Files", href: "/workspace/files", icon: FolderOpen },
   { name: "Commands", href: "/workspace/commands", icon: Terminal },
-  { name: "Settings", href: "/workspace/settings", icon: Settings },
 ]
 
 export function Sidebar() {
@@ -43,34 +42,45 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all duration-300 relative overflow-hidden",
+                "group flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-500 relative overflow-hidden",
                 isActive
-                  ? "text-primary dark:text-[#a5b9f5] font-semibold"
-                  : "text-zinc-600 dark:text-[#8b92a5] font-medium hover:text-zinc-900 dark:hover:text-[#eceef2]"
+                  ? "text-primary-foreground shadow-[inset_0_1px_rgba(255,255,255,0.2)] bg-primary/90 shadow-xl shadow-primary/20"
+                  : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
               )}
             >
               {isActive && (
-                <div className="absolute inset-0 bg-primary/10 dark:bg-[#8b9fd6]/10 border border-primary/20 dark:border-[#8b9fd6]/20 rounded-xl" />
+                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] animate-[glow-pulse_3s_infinite]" />
               )}
-              {!isActive && (
-                <div className="absolute inset-0 bg-transparent group-hover:bg-zinc-100 dark:group-hover:bg-[#1e2230]/50 rounded-xl transition-colors duration-300" />
-              )}
-              
-              <item.icon className={cn("w-5 h-5 relative z-10 transition-transform duration-300", isActive && "scale-110")} />
+              <item.icon className={cn("w-5 h-5 transition-transform duration-300", isActive ? "scale-110" : "group-hover:scale-110")} />
               <span className="relative z-10">{item.name}</span>
             </Link>
           )
         })}
+
+        <div className="pt-6 mt-6 border-t border-border/50">
+          <h4 className="px-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground/60 mb-3">System</h4>
+          <Link
+            href="/workspace/settings"
+            className={cn(
+              "group flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300",
+              pathname.startsWith('/workspace/settings')
+                 ? "text-primary-foreground shadow-[inset_0_1px_rgba(255,255,255,0.2)] bg-primary/90 shadow-xl shadow-primary/20"
+                 : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+            )}
+          >
+             <Settings className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
+             Settings
+          </Link>
+        </div>
       </nav>
-      <div className="pt-6 border-t border-zinc-200 dark:border-[#222635] pb-2">
+      <div className="pt-4 border-t border-border/50 pb-2">
         <form action={logout}>
           <button
             type="submit"
-            className="group flex w-full items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-zinc-600 dark:text-[#8b92a5] hover:text-red-600 dark:hover:text-[#e87c7c] transition-all duration-300 relative overflow-hidden"
+            className="group flex w-full items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all duration-300"
           >
-            <div className="absolute inset-0 bg-transparent group-hover:bg-red-50 dark:group-hover:bg-[#e87c7c]/10 rounded-xl transition-colors duration-300" />
-            <LogOut className="w-5 h-5 relative z-10 group-hover:-translate-x-0.5 transition-transform duration-300" />
-            <span className="relative z-10">Log out</span>
+            <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            Log out
           </button>
         </form>
       </div>
@@ -79,27 +89,42 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Desktop Sidebar with Light Glassmorphism */}
-      <div className="hidden md:flex flex-col w-[280px] h-screen p-5 bg-white/70 dark:bg-[#090b11]/60 backdrop-blur-xl border-r border-zinc-200 dark:border-[#222635] shadow-[1px_0_15px_-3px_rgba(0,0,0,0.05)] dark:shadow-none z-10">
-        <div className="flex items-center justify-between mb-2 px-3">
-          <h2 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-[#eceef2]">Workspace</h2>
-          <ThemeToggle />
+      <div className="hidden md:flex flex-col w-[280px] p-4 h-screen z-50">
+        <div className="glass-panel h-full rounded-[2rem] flex flex-col p-4 relative overflow-hidden">
+          <div className="absolute inset-0 bg-glass-gradient pointer-events-none" />
+          
+          <div className="flex items-center justify-between mb-4 px-2 pt-2 relative z-10">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
+                <Command className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <h2 className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/60">Workspace</h2>
+            </div>
+            <ThemeToggle />
+          </div>
+          
+          <div className="flex-1 overflow-y-auto mt-2 no-scrollbar relative z-10">
+             <NavLinks />
+          </div>
         </div>
-        <NavLinks />
       </div>
 
-      {/* Mobile Header & Sheet */}
-      <div className="md:hidden flex items-center justify-between p-4 border-b border-zinc-200 dark:border-[#222635] bg-white/70 dark:bg-[#090b11]/80 backdrop-blur-xl z-20 sticky top-0">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-[#eceef2]">Workspace</h2>
+      <div className="md:hidden flex items-center justify-between p-4 border-b border-border/50 glass-panel sticky top-0 z-50">
         <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
+             <Command className="w-4 h-4 text-primary-foreground" />
+          </div>
+          <h2 className="text-lg font-bold tracking-tight">Workspace</h2>
+        </div>
+        <div className="flex items-center gap-2">
           <ThemeToggle />
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-xl hover:bg-zinc-100 dark:hover:bg-[#1e2230]">
-                <Menu className="h-[22px] w-[22px] text-zinc-700 dark:text-[#eceef2]" />
+              <Button variant="ghost" size="icon" className="rounded-xl">
+                <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] p-6 pt-16 flex flex-col bg-white/95 dark:bg-[#12151e]/95 backdrop-blur-2xl border-l dark:border-[#222635]">
+            <SheetContent side="right" className="w-[85vw] max-w-[320px] p-4 pt-12 flex flex-col glass-panel border-l border-border/50">
               <NavLinks />
             </SheetContent>
           </Sheet>
