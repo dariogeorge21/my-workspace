@@ -207,32 +207,33 @@ export default function PasswordsPage() {
     <div className="max-w-6xl mx-auto p-6 md:p-8 animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-2">My Passwords</h1>
-          <p className="text-zinc-500 dark:text-zinc-400">Secure encrypted vault for your application credentials.</p>
+          <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-br from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-500 bg-clip-text text-transparent">My Passwords</h1>
+          <p className="text-zinc-500 dark:text-zinc-400 font-medium">Secure encrypted vault for your application credentials.</p>
         </div>
-        <Button onClick={() => openEditor(null)} className="rounded-xl px-6 bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 transition-all hover:-translate-y-0.5">
+        <Button onClick={() => openEditor(null)} className="rounded-xl px-6 bg-zinc-900 text-white dark:bg-white dark:text-black transition-all hover:-translate-y-0.5 shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)]">
           <Plus className="w-4 h-4 mr-2" />
           Add Password
         </Button>
       </div>
 
       <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+        <div className="relative flex-1 w-full group">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 rounded-xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 z-10" />
           <Input 
             placeholder="Search applications or usernames..." 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 rounded-xl border-zinc-200 dark:border-zinc-800 h-11 bg-white/50 dark:bg-slate-900/50"
+            className="pl-9 rounded-xl border-zinc-200 dark:border-white/10 bg-white/60 dark:bg-black/40 backdrop-blur-md h-11 focus-visible:ring-1 focus-visible:ring-white/20 transition-all relative z-10"
           />
         </div>
       </div>
 
-      {/* Data Table manually built for better Shadcn custom look per PRD */}
-      <Card className="rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm shadow-sm">
-        <div className="overflow-x-auto">
+      <div className="glass-panel rounded-3xl border border-white/20 dark:border-white/10 overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_40px_rgba(0,0,0,0.4)] bg-white/60 dark:bg-black/40 relative group">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent dark:from-white/5 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="overflow-x-auto relative z-10">
           <table className="w-full text-sm text-left">
-            <thead className="bg-zinc-50/50 dark:bg-zinc-900/50 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-medium">
+            <thead className="bg-white/80 dark:bg-white/5 border-b border-black/5 dark:border-white/10 text-zinc-500 dark:text-zinc-400 font-medium">
               <tr>
                 <th className="px-6 py-4">Application</th>
                 <th className="px-6 py-4">Username</th>
@@ -241,16 +242,21 @@ export default function PasswordsPage() {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tbody className="divide-y divide-black/5 dark:divide-white/5">
               {!isLoading && entries.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
-                    No passwords found in vault.
+                  <td colSpan={5} className="px-6 py-16 text-center text-zinc-500">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-16 h-16 mb-4 rounded-full bg-zinc-100 dark:bg-white/5 flex items-center justify-center glass-ambient-glow">
+                        <KeyRound className="w-8 h-8 text-zinc-400 dark:text-zinc-500" />
+                      </div>
+                      <p>No passwords found in vault.</p>
+                    </div>
                   </td>
                 </tr>
               )}
               {entries.map((entry) => (
-                <tr key={entry.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
+                <tr key={entry.id} className="hover:bg-white/90 dark:hover:bg-white/5 transition-colors">
                   <td className="px-6 py-4 font-semibold text-zinc-900 dark:text-zinc-50">
                     {entry.application_name}
                   </td>
@@ -259,36 +265,37 @@ export default function PasswordsPage() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <span className="font-mono tracking-widest text-zinc-600 dark:text-zinc-400">
+                      <span className="font-mono tracking-widest text-zinc-600 dark:text-zinc-400 bg-white/50 dark:bg-white/5 px-2 py-1 rounded-md border border-black/5 dark:border-white/5">
                         {revealedPasswords[entry.id] || entry.encrypted_password}
                       </span>
-                      <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full" onClick={() => handleReveal(entry.id)}>
+                      <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full hover:bg-black/5 dark:hover:bg-white/10" onClick={() => handleReveal(entry.id)}>
                         {revealedPasswords[entry.id] ? <EyeOff className="w-3.5 h-3.5 text-zinc-500" /> : <Eye className="w-3.5 h-3.5 text-zinc-500" />}
                       </Button>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-zinc-500 dark:text-zinc-400 text-xs">
+                  <td className="px-6 py-4 text-zinc-500 dark:text-zinc-400 text-xs font-medium">
                     {formatDistanceToNow(new Date(entry.updated_at))} ago
                   </td>
                   <td className="px-6 py-4 text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
-                          <MoreHorizontal className="w-4 h-4 text-zinc-500" />
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-black/5 dark:hover:bg-white/10 text-zinc-500 transition-colors">
+                          <MoreHorizontal className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="rounded-xl">
-                        <DropdownMenuItem onClick={() => handleCopyPassword(entry.id)} className="cursor-pointer">
-                          <Copy className="w-4 h-4 mr-2 text-zinc-500" /> Copy Password
+                      <DropdownMenuContent align="end" className="rounded-xl border-white/20 dark:border-white/10 glass-panel bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl">
+                        <DropdownMenuItem onClick={() => handleCopyPassword(entry.id)} className="cursor-pointer focus:bg-zinc-100 dark:focus:bg-white/10">
+                          <Copy className="w-4 h-4 mr-2" /> Copy Password
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => copyToClipboard(entry.username)} className="cursor-pointer">
-                          <Copy className="w-4 h-4 mr-2 text-zinc-500" /> Copy Username
+                        <DropdownMenuItem onClick={() => copyToClipboard(entry.username)} className="cursor-pointer focus:bg-zinc-100 dark:focus:bg-white/10">
+                          <Copy className="w-4 h-4 mr-2" /> Copy Username
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => openEditor(entry.id)} className="cursor-pointer">
-                          <KeyRound className="w-4 h-4 mr-2 text-zinc-500" /> Edit
+                        <DropdownMenuItem onClick={() => openEditor(entry.id)} className="cursor-pointer focus:bg-zinc-100 dark:focus:bg-white/10">
+                          <KeyRound className="w-4 h-4 mr-2" /> Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDelete(entry.id)} className="cursor-pointer text-red-600 focus:bg-red-50 dark:focus:bg-red-950/30">
-                          <Trash2 className="w-4 h-4 mr-2 text-red-500" /> Delete
+                        <div className="h-px bg-zinc-200 dark:bg-white/10 my-1 mx-2" />
+                        <DropdownMenuItem onClick={() => handleDelete(entry.id)} className="cursor-pointer text-red-600 focus:bg-red-50 dark:focus:bg-red-500/20">
+                          <Trash2 className="w-4 h-4 mr-2" /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -298,7 +305,7 @@ export default function PasswordsPage() {
             </tbody>
           </table>
         </div>
-      </Card>
+      </div>
 
       {/* Reusable Modals */}
       <VaultAuthModal 
@@ -308,18 +315,20 @@ export default function PasswordsPage() {
       />
 
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent className="sm:max-w-md rounded-2xl border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl">
+        <DialogContent className="sm:max-w-md rounded-3xl border border-white/20 dark:border-white/10 glass-panel bg-white/95 dark:bg-zinc-900/95 backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_50px_rgba(0,0,0,0.5)]">
           <DialogHeader>
-            <DialogTitle>{editingId ? "Edit Password Entry" : "New Password Entry"}</DialogTitle>
+            <DialogTitle className="text-xl font-bold bg-gradient-to-br from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-500 bg-clip-text text-transparent">
+              {editingId ? "Edit Password Entry" : "New Password Entry"}
+            </DialogTitle>
           </DialogHeader>
-          <form onSubmit={saveEntry} className="space-y-4 py-4">
+          <form onSubmit={saveEntry} className="space-y-5 py-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Application Name</label>
               <Input 
                 value={formData.app} 
                 onChange={(e) => setFormData({...formData, app: e.target.value})} 
                 placeholder="e.g. GitHub, Vercel"
-                className="rounded-xl"
+                className="rounded-xl border-black/10 dark:border-white/10 bg-white/50 dark:bg-black/20 focus-visible:ring-1 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/20"
               />
             </div>
             <div className="space-y-2">
@@ -328,7 +337,7 @@ export default function PasswordsPage() {
                 value={formData.username} 
                 onChange={(e) => setFormData({...formData, username: e.target.value})} 
                 placeholder="developer@example.com"
-                className="rounded-xl"
+                className="rounded-xl border-black/10 dark:border-white/10 bg-white/50 dark:bg-black/20 focus-visible:ring-1 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/20"
               />
             </div>
             <div className="space-y-2">
@@ -338,13 +347,13 @@ export default function PasswordsPage() {
                 value={formData.password} 
                 onChange={(e) => setFormData({...formData, password: e.target.value})} 
                 placeholder="Enter raw password"
-                className="rounded-xl"
+                className="rounded-xl border-black/10 dark:border-white/10 bg-white/50 dark:bg-black/20 focus-visible:ring-1 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/20"
                 autoComplete="new-password"
               />
             </div>
-            <DialogFooter>
-              <Button type="button" variant="ghost" onClick={() => setIsEditorOpen(false)} className="rounded-xl">Cancel</Button>
-              <Button type="submit" disabled={isSaving} className="rounded-xl bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900">
+            <DialogFooter className="pt-4">
+              <Button type="button" variant="ghost" onClick={() => setIsEditorOpen(false)} className="rounded-xl hover:bg-black/5 dark:hover:bg-white/10 transition-colors">Cancel</Button>
+              <Button type="submit" disabled={isSaving} className="rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-black shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 transition-all">
                 Save Entry
               </Button>
             </DialogFooter>
