@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { FileText, Bookmark, Lock, FolderOpen, Terminal, Settings } from "lucide-react"
+import { FileText, Bookmark, Lock, FolderOpen, Terminal, Settings, ArrowUpRight, Plus } from "lucide-react"
 import Link from "next/link"
 import { getSettings, getDashboardApps, getDashboardStats } from "@/lib/actions/settings"
 import { toast } from "sonner"
@@ -15,7 +15,7 @@ export default function DashboardPage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      toast.loading("✨ Hang on! Loading your workspace...", { 
+      toast.loading("Loading workspace...", { 
         id: "dashboard-load",
       })
 
@@ -42,56 +42,22 @@ export default function DashboardPage() {
 
   if (!settings) {
     return (
-      <div className="max-w-6xl mx-auto p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
-        <header className="space-y-3">
-          <Skeleton className="h-9 w-48 rounded-lg bg-indigo-500/10 dark:bg-indigo-400/10 ring-1 ring-indigo-500/20 animate-pulse transition-all duration-700" />
-          <Skeleton className="h-5 w-96 rounded-md bg-zinc-200 dark:bg-zinc-800 animate-pulse transition-all duration-700 delay-100" />
+      <div className="max-w-6xl mx-auto p-6 md:p-10 space-y-12 animate-in fade-in duration-700">
+        <header className="space-y-4">
+          <Skeleton className="h-10 w-64 rounded-md bg-zinc-200 dark:bg-[#1e2230]" />
+          <Skeleton className="h-5 w-96 rounded-md bg-zinc-200/50 dark:bg-[#1e2230]/50" />
         </header>
 
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[1, 2, 3, 4].map((i) => (
-            <Card key={i} className="p-6 border-indigo-500/10 dark:border-indigo-400/10 rounded-2xl bg-indigo-50/30 dark:bg-slate-900/50 backdrop-blur-sm shadow-[0_0_15px_rgba(99,102,241,0.05)] dark:shadow-[0_0_15px_rgba(99,102,241,0.1)] flex items-center justify-between overflow-hidden relative border group hover:border-indigo-500/30 transition-all duration-500">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 dark:via-white/5 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-[1500ms]" />
-              <div className="space-y-2 relative">
-                <Skeleton className="h-3 w-20 rounded-md bg-indigo-500/20 dark:bg-indigo-400/20 animate-pulse" />
-                <Skeleton className="h-8 w-12 rounded-lg bg-indigo-500/10 dark:bg-indigo-400/10 animate-pulse duration-1000" />
+            <div key={i} className="p-6 rounded-2xl bg-white dark:bg-[#12151e] border border-zinc-200 dark:border-[#222635] flex items-center justify-between">
+              <div className="space-y-3">
+                <Skeleton className="h-3 w-20 rounded-md bg-zinc-200 dark:bg-[#1e2230]" />
+                <Skeleton className="h-8 w-12 rounded-md bg-zinc-200 dark:bg-[#1e2230]" />
               </div>
-              <Skeleton className="w-12 h-12 rounded-xl bg-indigo-500/20 dark:bg-indigo-400/20 animate-pulse duration-700 shadow-[0_0_10px_rgba(99,102,241,0.2)]" />
-            </Card>
-          ))}
-        </section>
-
-        <section>
-          <div className="mb-4">
-            <Skeleton className="h-7 w-40 rounded-lg bg-indigo-500/10 dark:bg-indigo-400/10 border border-indigo-500/20" />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <Card key={i} className="p-6 border-indigo-500/10 dark:border-indigo-400/10 rounded-2xl h-full flex flex-col group bg-indigo-50/30 dark:bg-slate-900/50 backdrop-blur-sm shadow-[0_0_15px_rgba(99,102,241,0.05)] overflow-hidden relative border transition-all duration-500 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 blur-[40px] rounded-full" />
-                <Skeleton className="w-9 h-9 rounded-xl mb-4 bg-indigo-500/20 dark:bg-indigo-400/20 animate-pulse" />
-                <Skeleton className="h-5 w-32 rounded-md mb-2 bg-indigo-500/15 dark:bg-indigo-400/15 animate-pulse duration-[1500ms]" />
-                <Skeleton className="h-4 w-48 rounded-md bg-indigo-500/10 dark:bg-indigo-400/10 animate-pulse duration-1000" />
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <div className="mb-4">
-            <Skeleton className="h-7 w-32 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50" />
-          </div>
-          <Card className="p-6 border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm shadow-sm relative overflow-hidden">
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,rgba(99,102,241,0.03),transparent)] -translate-x-[100%] animate-[pulse_3s_infinite]" />
-            <div className="flex flex-wrap gap-4 relative">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="flex flex-col items-center gap-2 p-3 min-w-[80px]">
-                  <Skeleton className="w-12 h-12 rounded-xl bg-zinc-200/50 dark:bg-zinc-800/50 animate-pulse delay-[150ms]" />
-                  <Skeleton className="h-3 w-16 rounded-md bg-zinc-200/30 dark:bg-zinc-800/30 animate-pulse delay-300" />
-                </div>
-              ))}
+              <Skeleton className="w-12 h-12 rounded-xl bg-zinc-200/50 dark:bg-[#1e2230]/50" />
             </div>
-          </Card>
+          ))}
         </section>
       </div>
     )
@@ -101,150 +67,169 @@ export default function DashboardPage() {
   const stats = settings.dashboard_stats_settings
 
   return (
-    <div className="max-w-6xl mx-auto p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
-      <header>
-        <h1 className="text-3xl font-bold tracking-tight mb-2">Dashboard</h1>
-        <p className="text-zinc-500 dark:text-zinc-400">Overview of your workspace assets and quick actions.</p>
+    <div className="max-w-6xl mx-auto p-6 md:p-10 space-y-12 animate-in fade-in duration-700">
+      <header className="flex flex-col gap-2">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-[#f1f3f5]">Dashboard</h1>
+        <p className="text-lg text-zinc-500 dark:text-[#8b92a5] max-w-2xl leading-relaxed">Overview of your workspace assets and quick actions.</p>
       </header>
 
-      {/* Stats Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats?.show_projects && (
-          <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1 tracking-wide uppercase text-[10px]">App Prompts</p>
-                <p className="text-3xl font-bold tracking-tight">{statsData.appPrompts}</p>
+      {/* Stats - Physical Architectural Cards */}
+      <section>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {stats?.show_projects && (
+            <Card className="p-6 border-zinc-200 dark:border-[#222635] rounded-2xl bg-white dark:bg-[#12151e] group relative overflow-hidden flex flex-col justify-between h-[140px] shadow-sm premium-shadow transition-transform duration-300 hover:-translate-y-1">
+              <div className="flex items-start justify-between w-full">
+                <span className="p-2.5 bg-zinc-100 dark:bg-[#1e2230] rounded-lg">
+                  <FileText className="w-5 h-5 text-zinc-700 dark:text-[#d1d6e6]" />
+                </span>
               </div>
-              <div className="p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-xl"><FileText className="w-6 h-6 text-zinc-700 dark:text-zinc-300" /></div>
-            </div>
-          </Card>
-        )}
-        
-        {stats?.show_projects && (
-          <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1 tracking-wide uppercase text-[10px]">My Prompts</p>
-                <p className="text-3xl font-bold tracking-tight">{statsData.personalPrompts}</p>
+                <p className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-[#f1f3f5]">{statsData.appPrompts}</p>
+                <p className="text-xs font-semibold text-zinc-500 dark:text-[#8b92a5] mt-1 tracking-widest uppercase">App Prompts</p>
               </div>
-              <div className="p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-xl"><Bookmark className="w-6 h-6 text-zinc-700 dark:text-zinc-300" /></div>
-            </div>
-          </Card>
-        )}
-        
-        {stats?.show_words && (
-           <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
+            </Card>
+          )}
+          
+          {stats?.show_projects && (
+            <Card className="p-6 border-zinc-200 dark:border-[#222635] rounded-2xl bg-white dark:bg-[#12151e] group relative overflow-hidden flex flex-col justify-between h-[140px] shadow-sm premium-shadow transition-transform duration-300 hover:-translate-y-1">
+              <div className="flex items-start justify-between w-full">
+                <span className="p-2.5 bg-zinc-100 dark:bg-[#1e2230] rounded-lg">
+                  <Bookmark className="w-5 h-5 text-zinc-700 dark:text-[#d1d6e6]" />
+                </span>
+              </div>
               <div>
-                <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1 tracking-wide uppercase text-[10px]">Passwords</p>
-                <p className="text-3xl font-bold tracking-tight">{statsData.passwords}</p>
+                <p className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-[#f1f3f5]">{statsData.personalPrompts}</p>
+                <p className="text-xs font-semibold text-zinc-500 dark:text-[#8b92a5] mt-1 tracking-widest uppercase">My Prompts</p>
               </div>
-              <div className="p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-xl"><Lock className="w-6 h-6 text-zinc-700 dark:text-zinc-300" /></div>
-            </div>
-          </Card>
-        )}
+            </Card>
+          )}
+          
+          {stats?.show_words && (
+             <Card className="p-6 border-zinc-200 dark:border-[#222635] rounded-2xl bg-white dark:bg-[#12151e] group relative overflow-hidden flex flex-col justify-between h-[140px] shadow-sm premium-shadow transition-transform duration-300 hover:-translate-y-1">
+              <div className="flex items-start justify-between w-full">
+                <span className="p-2.5 bg-zinc-100 dark:bg-[#1e2230] rounded-lg">
+                  <Lock className="w-5 h-5 text-zinc-700 dark:text-[#d1d6e6]" />
+                </span>
+              </div>
+              <div>
+                <p className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-[#f1f3f5]">{statsData.passwords}</p>
+                <p className="text-xs font-semibold text-zinc-500 dark:text-[#8b92a5] mt-1 tracking-widest uppercase">Passwords</p>
+              </div>
+            </Card>
+          )}
 
-        {stats?.show_time && (
-           <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1 tracking-wide uppercase text-[10px]">Commands</p>
-                <p className="text-3xl font-bold tracking-tight">{statsData.commands}</p>
+          {stats?.show_time && (
+             <Card className="p-6 border-zinc-200 dark:border-[#222635] rounded-2xl bg-white dark:bg-[#12151e] group relative overflow-hidden flex flex-col justify-between h-[140px] shadow-sm premium-shadow transition-transform duration-300 hover:-translate-y-1">
+              <div className="flex items-start justify-between w-full">
+                 <span className="p-2.5 bg-zinc-100 dark:bg-[#1e2230] rounded-lg">
+                  <Terminal className="w-5 h-5 text-zinc-700 dark:text-[#d1d6e6]" />
+                </span>
               </div>
-              <div className="p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-xl"><Terminal className="w-6 h-6 text-zinc-700 dark:text-zinc-300" /></div>
-            </div>
-          </Card>
-        )}
+              <div>
+                <p className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-[#f1f3f5]">{statsData.commands}</p>
+                <p className="text-xs font-semibold text-zinc-500 dark:text-[#8b92a5] mt-1 tracking-widest uppercase">Commands</p>
+              </div>
+            </Card>
+          )}
+        </div>
       </section>
 
-      {/* Quick Navigation */}
-      <section>
-        <h2 className="text-xl font-bold tracking-tight mb-4">Quick Navigation</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Quick Navigation - List format for variety instead of identical cards */}
+      <section className="space-y-6">
+        <header>
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-[#eceef2]">Quick Navigation</h2>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-4">
           {quickNav?.show_apps && (
-            <Link href="/workspace/app-prompts">
-              <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/50 cursor-pointer transition-colors duration-200 group h-full flex flex-col">
-                <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 w-fit rounded-xl mb-4 text-indigo-500 dark:text-indigo-400 group-hover:scale-105 transition-transform"><FileText className="w-5 h-5" /></div>
-                <h3 className="font-semibold mb-1 text-zinc-900 dark:text-zinc-50">Application Prompts</h3>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">Manage specific app prompts</p>
-              </Card>
+            <Link href="/workspace/app-prompts" className="group flex items-start gap-4 p-4 rounded-xl hover:bg-zinc-50 dark:hover:bg-[#12151e] border border-transparent hover:border-zinc-200 dark:hover:border-[#222635] transition-all">
+              <div className="mt-1 p-2 bg-zinc-100 dark:bg-[#1e2230] text-zinc-700 dark:text-[#8b9fd6] rounded-md group-hover:bg-primary group-hover:text-white transition-colors"><FileText className="w-4 h-4" /></div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-zinc-900 dark:text-[#f1f3f5] flex items-center gap-2">Application Prompts <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all text-zinc-400" /></h3>
+                <p className="text-sm text-zinc-500 dark:text-[#8b92a5] mt-1">Manage specific app prompts</p>
+              </div>
             </Link>
           )}
 
           {quickNav?.show_passwords && (
-            <Link href="/workspace/passwords">
-              <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/50 cursor-pointer transition-colors duration-200 group h-full flex flex-col">
-                <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 w-fit rounded-xl mb-4 text-indigo-500 dark:text-indigo-400 group-hover:scale-105 transition-transform"><Lock className="w-5 h-5" /></div>
-                <h3 className="font-semibold mb-1 text-zinc-900 dark:text-zinc-50">Personal Passwords</h3>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">Secure encrypted vault</p>
-              </Card>
-            </Link>
+             <Link href="/workspace/passwords" className="group flex items-start gap-4 p-4 rounded-xl hover:bg-zinc-50 dark:hover:bg-[#12151e] border border-transparent hover:border-zinc-200 dark:hover:border-[#222635] transition-all">
+             <div className="mt-1 p-2 bg-zinc-100 dark:bg-[#1e2230] text-zinc-700 dark:text-[#8b9fd6] rounded-md group-hover:bg-primary group-hover:text-white transition-colors"><Lock className="w-4 h-4" /></div>
+             <div className="flex-1">
+               <h3 className="font-semibold text-zinc-900 dark:text-[#f1f3f5] flex items-center gap-2">Personal Passwords <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all text-zinc-400" /></h3>
+               <p className="text-sm text-zinc-500 dark:text-[#8b92a5] mt-1">Secure encrypted vault</p>
+             </div>
+           </Link>
           )}
 
           {quickNav?.show_commands && (
-             <Link href="/workspace/commands">
-             <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/50 cursor-pointer transition-colors duration-200 group h-full flex flex-col">
-               <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 w-fit rounded-xl mb-4 text-indigo-500 dark:text-indigo-400 group-hover:scale-105 transition-transform"><Terminal className="w-5 h-5" /></div>
-               <h3 className="font-semibold mb-1 text-zinc-900 dark:text-zinc-50">Favorite Commands</h3>
-               <p className="text-sm text-zinc-500 dark:text-zinc-400">Quick copy terminal snippets</p>
-             </Card>
-           </Link>
+              <Link href="/workspace/commands" className="group flex items-start gap-4 p-4 rounded-xl hover:bg-zinc-50 dark:hover:bg-[#12151e] border border-transparent hover:border-zinc-200 dark:hover:border-[#222635] transition-all">
+              <div className="mt-1 p-2 bg-zinc-100 dark:bg-[#1e2230] text-zinc-700 dark:text-[#8b9fd6] rounded-md group-hover:bg-primary group-hover:text-white transition-colors"><Terminal className="w-4 h-4" /></div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-zinc-900 dark:text-[#f1f3f5] flex items-center gap-2">Favorite Commands <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all text-zinc-400" /></h3>
+                <p className="text-sm text-zinc-500 dark:text-[#8b92a5] mt-1">Quick copy terminal snippets</p>
+              </div>
+            </Link>
           )}
 
           {quickNav?.show_files && (
-             <Link href="/workspace/files">
-             <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/50 cursor-pointer transition-colors duration-200 group h-full flex flex-col">
-               <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 w-fit rounded-xl mb-4 text-indigo-500 dark:text-indigo-400 group-hover:scale-105 transition-transform"><FolderOpen className="w-5 h-5" /></div>
-               <h3 className="font-semibold mb-1 text-zinc-900 dark:text-zinc-50">Personal Files</h3>
-               <p className="text-sm text-zinc-500 dark:text-zinc-400">Stored securely</p>
-             </Card>
-           </Link>
+              <Link href="/workspace/files" className="group flex items-start gap-4 p-4 rounded-xl hover:bg-zinc-50 dark:hover:bg-[#12151e] border border-transparent hover:border-zinc-200 dark:hover:border-[#222635] transition-all">
+              <div className="mt-1 p-2 bg-zinc-100 dark:bg-[#1e2230] text-zinc-700 dark:text-[#8b9fd6] rounded-md group-hover:bg-primary group-hover:text-white transition-colors"><FolderOpen className="w-4 h-4" /></div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-zinc-900 dark:text-[#f1f3f5] flex items-center gap-2">Personal Files <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all text-zinc-400" /></h3>
+                <p className="text-sm text-zinc-500 dark:text-[#8b92a5] mt-1">Stored securely</p>
+              </div>
+            </Link>
           )}
 
-          <Link href="/workspace/settings">
-            <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/50 cursor-pointer transition-colors duration-200 group h-full flex flex-col">
-              <div className="p-2 bg-zinc-100 dark:bg-zinc-800/50 w-fit rounded-xl mb-4 text-zinc-500 group-hover:scale-105 transition-transform"><Settings className="w-5 h-5" /></div>
-              <h3 className="font-semibold mb-1 text-zinc-900 dark:text-zinc-50">Settings</h3>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">Configure your workspace</p>
-            </Card>
+          <Link href="/workspace/settings" className="group flex items-start gap-4 p-4 rounded-xl hover:bg-zinc-50 dark:hover:bg-[#12151e] border border-transparent hover:border-zinc-200 dark:hover:border-[#222635] transition-all">
+            <div className="mt-1 p-2 bg-zinc-100 dark:bg-[#1e2230] text-zinc-700 dark:text-zinc-500 rounded-md group-hover:bg-zinc-800 group-hover:text-white transition-colors"><Settings className="w-4 h-4" /></div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-zinc-900 dark:text-[#f1f3f5] flex items-center gap-2">Settings <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all text-zinc-400" /></h3>
+              <p className="text-sm text-zinc-500 dark:text-[#8b92a5] mt-1">Configure your workspace</p>
+            </div>
           </Link>
         </div>
       </section>
 
-      {/* My Apps Panel */}
-      <section>
-        <h2 className="text-xl font-bold tracking-tight mb-4">My Apps</h2>
-        <Card className="p-6 border-zinc-200 dark:border-zinc-800 rounded-2xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex flex-wrap gap-4">
+      {/* My Apps Panel - Elegant App Dock Style */}
+      <section className="space-y-6 pt-4">
+        <header>
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-[#eceef2]">My Apps</h2>
+        </header>
+
+        <div className="p-8 rounded-2xl bg-zinc-50/50 dark:bg-[#12151e]/50 border border-zinc-200 dark:border-[#222635] shadow-inner relative">
+          <div className="flex flex-wrap gap-6 items-center">
             
             {apps.map(app => (
-              <a key={app.id} href={app.application_url} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 p-3 min-w-[80px] hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl cursor-pointer transition-colors">
-                {app.icon_url ? (
-                   <img src={app.icon_url} alt="" className="w-12 h-12 rounded-xl object-cover shadow-sm bg-white" />
-                ) : (
-                  <div className="w-12 h-12 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 flex items-center justify-center font-bold text-lg shadow-sm">
-                    {app.application_name.charAt(0)}
-                  </div>
-                )}
-                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400 max-w-[80px] truncate text-center">{app.application_name}</span>
+              <a key={app.id} href={app.application_url} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-3 w-20 cursor-pointer">
+                <div className="w-16 h-16 rounded-2xl p-1 bg-white dark:bg-[#1a1e2b] shadow-sm border border-zinc-200 dark:border-[#222635] group-hover:-translate-y-1 group-hover:shadow-md dark:group-hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] transition-all flex items-center justify-center overflow-hidden">
+                  {app.icon_url ? (
+                     <img src={app.icon_url} alt="" className="w-full h-full rounded-xl object-contain" />
+                  ) : (
+                    <div className="w-full h-full rounded-xl bg-zinc-100 dark:bg-[#090b11] text-zinc-900 dark:text-white flex items-center justify-center font-bold text-xl">
+                      {app.application_name.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                <span className="text-[13px] font-medium text-zinc-600 dark:text-[#8b92a5] truncate w-full text-center group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{app.application_name}</span>
               </a>
             ))}
 
             {apps.length === 0 && (
-              <div className="px-4 py-8 text-center text-sm text-zinc-500 w-full border border-dashed rounded-xl border-zinc-200 dark:border-zinc-800">
+              <div className="px-4 py-8 text-center text-sm text-zinc-500 w-full rounded-xl">
                 No apps saved yet.
               </div>
             )}
 
-            <Link href="/workspace/settings" className="flex flex-col items-center gap-2 p-3 min-w-[80px] hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl cursor-pointer transition-colors border border-dashed border-zinc-300 dark:border-zinc-700">
-              <div className="w-12 h-12 rounded-xl text-zinc-400 flex items-center justify-center">
-                +
+            <Link href="/workspace/settings" className="group flex flex-col items-center gap-3 w-20 cursor-pointer">
+              <div className="w-16 h-16 rounded-2xl border border-dashed border-zinc-300 dark:border-[#4e597c] flex items-center justify-center bg-transparent group-hover:bg-zinc-100 dark:group-hover:bg-[#1a1e2b] transition-all">
+                <Plus className="w-6 h-6 text-zinc-400 dark:text-[#4e597c] group-hover:text-zinc-600 dark:group-hover:text-[#8b9fd6] transition-colors" />
               </div>
-              <span className="text-xs font-medium text-zinc-500">Edit Apps</span>
+              <span className="text-[13px] font-medium text-zinc-500 dark:text-[#4e597c] truncate w-full text-center group-hover:text-zinc-700 dark:group-hover:text-[#8b9fd6] transition-colors">Add App</span>
             </Link>
+
           </div>
-        </Card>
+        </div>
       </section>
     </div>
   )
